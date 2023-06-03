@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+# 在此处添加 app 中的 urls 路径
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("polls/", include("polls.urls")),
