@@ -1,11 +1,14 @@
 <h3>创建项目</h3>
 新建项目：
+
 ```shell
 > django-admin startproject django_document_project
 ```
+
 <br>
 
 完成之后将会得到这样一个文件目录：
+
 ```text
 mysite/
     manage.py
@@ -16,6 +19,7 @@ mysite/
         asgi.py
         wsgi.py
 ```
+
 - 外层的 mysite/ 为项目的容器名，可以随意修改
 - manage.py 为 Django 提供的命令行管理工具
 - 里层的 mysite/ 为一个 Python 包，当引用内部对象时需要使用
@@ -28,19 +32,24 @@ mysite/
 <br>
 
 启动项目：
+
 ```shell
 > python manage.py runserver [ip:port]
 ```
+
 <br>
 
 <h3>新建应用</h3>
 创建应用：
+
 ```shell
 > python manage.py startapp polls
 ```
+
 <br>
 
 完成之后将会得到这样一个文件目录：
+
 ```text
 polls/
     __init__.py
