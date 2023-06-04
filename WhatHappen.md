@@ -63,3 +63,4 @@ polls/
 ```
 
 现在编写视图，在 polls/views.py 文件中查看接下来是如何运作的
+> 前往 polls/views.py 查看1.1
