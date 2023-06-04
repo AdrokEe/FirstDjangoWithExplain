@@ -68,6 +68,7 @@ ALLOWED_HOSTS = []
 # c.delete()  删除字段
 
 # 更多双下划线查询方法详见：https://docs.djangoproject.com/zh-hans/4.2/topics/db/queries/#field-lookups-intro
+# 接下来回到 WhatHappen.md 创建管理页面
 
 # 这个配置项中包含了项目中启用的应用
 INSTALLED_APPS = [
@@ -173,13 +174,14 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
 # 语言
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'zh-hans'
 
 # 2.1.1 修改时区为本地时区
 # 时区
 TIME_ZONE = 'Asia/Shanghai'
 
-# 是否启用翻译系统
+# 是否启用翻译系统，不开启则无视语言选项只显示英语
+# 作用于 django 创建的页面
 USE_I18N = True
 
 # 2.1.1 修改时区之后需要将此属性改为 False 否则仍然是 UTC 时区

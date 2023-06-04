@@ -1,4 +1,4 @@
-<h3>创建项目</h3>
+<h3>一、创建项目</h3>
 新建项目：
 
 ```shell
@@ -39,8 +39,8 @@ mysite/
 
 <br>
 
-<h3>新建应用</h3>
-创建应用：
+<h3>二、新建应用</h3>
+创建投票应用：
 
 ```shell
 > python manage.py startapp polls
@@ -62,5 +62,26 @@ polls/
     views.py
 ```
 
-现在编写视图，在 polls/views.py 文件中查看接下来是如何运作的
+现在来编写视图，在 polls/views.py 文件中查看接下来是如何运作的
+
 > 前往 polls/views.py 查看1.1
+
+<br>
+<h3>三、管理界面</h3>
+创建管理员账号：
+
+```shell
+> python manage.py createsuperuser
+```
+
+访问本地域名/admin/目录即可看见管理员登录界面
+<br>
+为了在后台管理中看到我们刚刚创建的投票应用，需要编辑 polls/admin.py 文件
+
+> 前往 polls/admin.py 查看2.6
+
+<br>
+<h3>四、实现功能</h3>
+接下来回到 polls/views.py 中继续添加内容以实现投票功能
+
+> 前往 polls/views.py 查看3.1
