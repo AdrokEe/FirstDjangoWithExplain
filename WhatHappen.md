@@ -74,8 +74,7 @@ polls/
 > python manage.py createsuperuser
 ```
 
-访问本地域名/admin/目录即可看见管理员登录界面
-<br>
+访问本地域名/admin/目录即可看见管理员登录界面<br>
 为了在后台管理中看到我们刚刚创建的投票应用，需要编辑 polls/admin.py 文件
 
 > 前往 polls/admin.py 查看2.6
@@ -85,3 +84,14 @@ polls/
 接下来回到 polls/views.py 中继续添加内容以实现投票功能
 
 > 前往 polls/views.py 查看3.1
+
+<br>
+<h3>五、自动化测试</h3>
+系统测试会自动在所有以 tests 开头的文件里寻找并执行测试代码<br>
+我们之前在编写 question 模型时，查询问题是否是最近发布的方法中含有 bug ——如果问题来自未来也会返回 `True` <br>
+现在来编写自动测试以发现这个问题
+
+> 前往 polls/tests.py 查看5.1
+
+<br>
+<h3>六、管理静态文件</h3>

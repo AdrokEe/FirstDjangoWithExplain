@@ -4,6 +4,7 @@
 # from django.http import Http404
 # from django.http import HttpResponseRedirect
 
+from django.utils import timezone
 from django.urls import reverse
 from django.views import generic
 from django.shortcuts import HttpResponse, render, get_object_or_404, redirect
@@ -71,6 +72,7 @@ from django.db.models import F
 
 
 # 4.6 使用通用视图替代上面的 index results vote 函数，降低耦合度
+# 完成后回到 WhatHappen.md 开始自动化测试  > 5.1
 
 # 4.6.1 index 视图继承自 ListView
 # https://docs.djangoproject.com/zh-hans/4.2/ref/class-based-views/generic-display/#django.views.generic.list.ListView
@@ -78,8 +80,13 @@ class IndexView(generic.ListView):
     template_name = "polls/index.html"
     context_object_name = "latest_question_list"
 
+    # 这会将未来的问题也返回给主页
+    # def get_queryset(self):
+    #     return Question.objects.order_by("-pub_date")[:5]
+
+    # 5.4.1 改进会返回未来问题的错误
     def get_queryset(self):
-        return Question.objects.order_by("-pub_date")[:5]
+        return Question.objects.filter(pub_date__lte=timezone.now()).order_by("-pub_date")[:5]
 
 
 # 4.6.2 detail 视图继承自 DetailView
@@ -87,6 +94,11 @@ class IndexView(generic.ListView):
 class DetailView(generic.DetailView):
     model = Question
     template_name = "polls/detail.html"
+
+    # 5.5 为了不让用户直接通过 url 访问到未来的问题，我们需要添加一些约束
+    # 回到 tests.py 测试这个问题是否还存在  > 5.6
+    def get_queryset(self):
+        return Question.objects.filter(pub_date__lte=timezone.now())
 
 
 # 4.6.3 results 视图继承自 DetailView
