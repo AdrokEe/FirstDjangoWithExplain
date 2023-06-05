@@ -1,8 +1,18 @@
 <!DOCTYPE html>
+<!-- 6.2 导入模板 -->
+<!-- 6.3.1 创建并添加文件 polls/static/polls/images/background.jpg -->
+<!-- 6.3.2 回到 style.css 继续添加样式 -->
+
+<!-- 这会生成绝对路径，之后再使用 static 时就会正确拼接完整的绝对路径 -->
+{% load static %}
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Index</title>
+
+<!--    6.2 应用模板-->
+    <link rel="stylesheet" href="{% static 'polls/style.css' %}">
 </head>
 <body>
 <!--    3.1.5 编写一个简单的主页-->

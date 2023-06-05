@@ -95,3 +95,10 @@ polls/
 
 <br>
 <h3>六、管理静态文件</h3>
+Django 会自动管理分发静态文件，通过 settings.py 可以进行相关配置<br>
+让我们来编写一个 css 看看这是怎么运行的
+
+> 创建并前往 polls/static/polls/style.css 查看6.1
+
+<br>
+<h3>七、自定义后台</h3>
