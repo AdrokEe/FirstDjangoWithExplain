@@ -9,7 +9,7 @@ from . import views
 app_name = "polls"
 urlpatterns = [
     # ex: /polls/
-    path("", views.index, name="index"),
+    # path("", views.index, name="index"),
 
     # 3.2.2 添加对应的视图
 
@@ -25,8 +25,9 @@ urlpatterns = [
     # 4.5 优化匹配模式
     # 前往 views.py 优化视图  > 4.6
     path("", views.IndexView.as_view(), name="index"),
-    # 此处的 pk 也表示为主键
+    # 继承自 generic 内的类可以使用 pk 表示为主键
+    # 继承自 generic 内的类需要使用 as_view() 来返回视图对象
     path("<int:pk>/", views.DetailView.as_view(), name="detail"),
     path("<int:pk>/results/", views.ResultsView.as_view(), name="results"),
-    path("<int:pk>/vote/", views.VoteView.as_view(), name="vote"),
+    path("<int:question_id>/vote/", views.vote, name="vote"),
 ]
