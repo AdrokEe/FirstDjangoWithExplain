@@ -1,0 +1,12 @@
+/* 6.1 编写一个简单样式 */
+/* 前往 index.html  > 6.2 */
+li a {
+    color: green;
+}
+
+/* 6.3.2 添加背景图 */
+/* 回到 WhatHappen.md 查看自定义后台管理部分 */
+body {
+    background-image: url("images/background.jpg");
+    background-size: cover;
+}
