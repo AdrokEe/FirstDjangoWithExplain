@@ -4,4 +4,6 @@
 <p>本项目不会讲解前端和数据库部分的内容</p>
 <p><u>WhatHappen.md记录了除编写代码以外需要做的事情</u></p>
 <br>
-阅读代码时请参照此文档: [官方文档](https://docs.djangoproject.com/zh-hans/4.2/intro/tutorial01/)
+阅读代码时请参照此文档: 
+
+[官方文档](https://docs.djangoproject.com/zh-hans/4.2/intro/tutorial01/)

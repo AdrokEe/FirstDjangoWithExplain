@@ -72,7 +72,27 @@ from django.db.models import F
 
 # 4.6 使用通用视图替代上面的 index results vote 函数，降低耦合度
 
-# 4.6.1
+# 4.6.1 index 视图继承自 ListView
+# https://docs.djangoproject.com/zh-hans/4.2/ref/class-based-views/generic-display/#django.views.generic.list.ListView
+class IndexView(generic.ListView):
+    template_name = "polls/index.html"
+    context_object_name = "latest_question_list"
+
+    def get_queryset(self):
+        return Question.objects.order_by("-pub_date")[:5]
+
+
+# 4.6.2 detail 视图继承自 DetailView
+# https://docs.djangoproject.com/zh-hans/4.2/ref/class-based-views/generic-display/#django.views.generic.detail.DetailView
+class DetailView(generic.DetailView):
+    model = Question
+    template_name = "polls/detail.html"
+
+
+# 4.6.3 results 视图继承自 DetailView
+class ResultsView(generic.DetailView):
+    model = Question
+    template_name = "polls/results.html"
 
 
 # 4.2 完善投票功能
@@ -104,8 +124,10 @@ def vote(request, question_id):
         selected_choice.votes = F("votes") + 1
         selected_choice.save()
 
-        # HttpResponseRedirect 将会重定向至该 url， reverse 会生成该字符串： "/polls/3/results/"
+        # 使用 HttpResponseRedirect 将会重定向至该 url
         # return HttpResponseRedirect(reverse("polls:results", args=(question.id,)))
 
+        # 更推荐使用 shortcuts 中的方法
+        # reverse 会生成该字符串： "/polls/3/results/"
         return redirect(reverse("polls:results", args=(question.id,)))
         # 继续完善 results 函数  > 4.3
