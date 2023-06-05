@@ -5,12 +5,12 @@
     <title>Index</title>
 </head>
 <body>
-    <!-- 3.3 编写一个简单的主页 -->
+<!--    3.1.5 编写一个简单的主页-->
     {% if latest_question_list %}
         <ul>
             {% for question in latest_question_list %}
                 <li>
-                    <!-- 这个模板将会代入至 app_name 为 polls 中的 url 中 name 为 detail 的条目 -->
+<!--                    这个模板将会代入至 app_name 为 polls 中的 url 中 name 为 detail 的条目-->
                     <a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a>
                 </li>
             {% endfor %}

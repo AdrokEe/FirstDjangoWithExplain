@@ -2,10 +2,15 @@
 # from django.template import loader
 # from django.http import HttpResponse
 # from django.http import Http404
+# from django.http import HttpResponseRedirect
 
-from django.shortcuts import HttpResponse, render, get_object_or_404
+from django.urls import reverse
+from django.views import generic
+from django.shortcuts import HttpResponse, render, get_object_or_404, redirect
 
-from .models import Question
+from .models import Question, Choice
+
+from django.db.models import F
 
 # 1.1 新增一个 index 视图
 # 创建并前往 urls.py 文件  > 1.2
@@ -13,46 +18,94 @@ from .models import Question
 #     return HttpResponse("Hello, this is the polls index")
 
 
-# 3.1 创建视图
-# 3.1.1 在该目录下创建 templates 目录，然后再创建 polls 目录，创建对应的网页
+# 3.1 创建视图和页面
+# 3.1.5 在该目录下创建 templates 目录，然后再创建 polls 目录，创建对应的网页
 # 前往 urls.py 文件  > 3.2.2
-# 前往 detail.html 和 index.html > 3.3
+# 前往 detail3_3.html 和 index.html > 3.3
 
 # 4.1 继续编写 detail.html 添加表单
 
-def index(request):
-    # 在排列的列名前加 - 表示倒序
-    latest_question_list = Question.objects.order_by("-pub_date")[:5]
-    context = {
-        "latest_question_list": latest_question_list,
-    }
-
-    # 使用 loader 的写法:
-    # template = loader.get_template("polls/index.html")
-    # return HttpResponse(template.render(context, request))
-
-    return render(request, "polls/index.html", context)
-
-
-# 显示查询的问题的编号
-def detail(request, question_id):
-
-    # 自己编写异常处理
-    # try:
-    #     question = Question.objects.filter(id=question_id).first()
-    # except Question.DoesNotExist:
-    #     raise Http404("Question does not exist")
-
-    question = get_object_or_404(Question, pk=question_id)
-    return render(request, "polls/detail.html", {"question": question})
+# 3.1.1 完善 index 视图
+# def index(request):
+#     # 在排列的列名前加 - 表示倒序
+#     latest_question_list = Question.objects.order_by("-pub_date")[:5]
+#     context = {
+#         "latest_question_list": latest_question_list,
+#     }
+#
+#     # 使用 loader 的写法:
+#     # template = loader.get_template("polls/index.html")
+#     # return HttpResponse(template.render(context, request))
+#
+#     return render(request, "polls/index.html", context)
 
 
-# 显示返回的问题的编号
-def results(request, question_id):
-    response = "This is the id of question resulted: %s."
-    return HttpResponse(response % question_id)
+# 3.1.1 显示查询的问题的编号
+# def detail(request, question_id):
+#
+#     # 自己编写异常处理
+#     # try:
+#     #     question = Question.objects.filter(id=question_id).first()
+#     # except Question.DoesNotExist:
+#     #     raise Http404("Question does not exist")
+#
+#     question = get_object_or_404(Question, pk=question_id)
+#     return render(request, "polls/detail.html", {"question": question})
 
 
-# 显示问题的投票数
+# 3.1.2 显示返回的问题的编号
+# def results(request, question_id):
+#     response = "This is the id of question resulted: %s."
+#     return HttpResponse(response % question_id)
+
+# 4.3 完善 results 函数
+# 创建 results.html 页面  > 4.4
+# def results(request, question_id):
+#     question = get_object_or_404(Question, pk=question_id)
+#     return render(request, "polls/results.html", {"question": question})
+
+
+# 3.1.3 显示问题的投票数
+# def vote(request, question_id):
+#     return HttpResponse("This is the number of voting on question: %s." % question_id)
+
+
+# 4.6 使用通用视图替代上面的 index results vote 函数，降低耦合度
+
+# 4.6.1
+
+
+# 4.2 完善投票功能
 def vote(request, question_id):
-    return HttpResponse("This is the number of voting on question: %s." % question_id)
+    question = get_object_or_404(Question, pk=question_id)
+    try:
+        # 可以通过 request.POST["name"] 访问 POST 提交的内容，如果不存在将会抛出错误。所以请使用此类属性时进行异常处理
+        selected_choice = question.choice_set.get(pk=request.POST["choice"])
+    except (KeyError, Choice.DoseNotExist):
+        return render(
+            request,
+            "polls/detail.html",
+            {
+                "question": question,
+                "error_message": "You didn't select a choice.",
+            },
+        )
+    else:
+        # 此处的 selected_choice.votes 为 python 在上文中获取的固定数值，这会导致一个问题
+        # 如果同时有两个 POST 同时被提交，假设原本 votes = 5 ，则 votes = 6 会被保存两次而不是期望的 votes = 7
+        # 为了解决这个问题我们需要把递增操作交给数据库而不是 python
+
+        # selected_choice.votes += 1
+        # selected_choice.save()
+
+        # 使用 F() 函数会将运算交由 SQL 而非 Python 处理
+        # 这个操作意味着每次执行到此处时都会从数据库中刷新这个查询，而不是使用在上文查询时就保存的这个静态对象
+        # 详见: https://docs.djangoproject.com/zh-hans/4.2/ref/models/expressions/#avoiding-race-conditions-using-f
+        selected_choice.votes = F("votes") + 1
+        selected_choice.save()
+
+        # HttpResponseRedirect 将会重定向至该 url， reverse 会生成该字符串： "/polls/3/results/"
+        # return HttpResponseRedirect(reverse("polls:results", args=(question.id,)))
+
+        return redirect(reverse("polls:results", args=(question.id,)))
+        # 继续完善 results 函数  > 4.3

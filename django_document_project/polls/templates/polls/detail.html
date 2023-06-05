@@ -5,12 +5,24 @@
     <title>Detail</title>
 </head>
 <body>
-    <!-- 3.3 编写一个简单的显示 -->
-    <h1>{{ question.question_text }}</h1>
-    <ul>
-        {% for choice in question.choice_set.all %}
-            <li>{{ choice.choice_text }}</li>
-        {% endfor %}
-    </ul>
+<!--4.1 完善 detail 功能-->
+<!--    action 将会指定这个表单提交到哪个视图中-->
+    <form action="{% url 'polls:vote' question.id %}" method="post">
+<!--        django 要求所有 POST 表单都需要使用 csrf_token 模板标签，这可以预防跨站点请求伪造攻击-->
+        {% csrf_token %}
+        <fieldset>
+            <legend><h1>{{ question.question_text }}</h1></legend>
+            {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+            {% for choice in question.choice_set.all %}
+<!--                forloop.counter 循环的次数-->
+                <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+                <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label>
+                <br>
+            {% endfor %}
+        </fieldset>
+<!--        在该例子中，数据: {choice: choice.id} 将会提交到 /polls/vote/1 的视图中处理-->
+<!--        点击提交后，数据将会前往 views.py 中的 vote 函数中处理,前往并数完善该函数  > 4.2-->
+        <input type="submit" value="Vote">
+    </form>
 </body>
 </html>

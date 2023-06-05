@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Results</title>
+</head>
+<body>
+<!--  4.4 完善 results 页面-->
+  <h1>{{ question.question_text }}</h1>
+  <ul>
+    {% for choice in question.choice_set.all %}
+      <li>
+        {{ choice.choice_text }} -- {{ choice.votes }} vote{{choice.votes|pluralize}}
+      </li>
+    {% endfor %}
+  </ul>
+
+  <a href="{% url 'polls:detail' question.id %}">Vote again</a>
+</body>
+</html>
+<!--至此基本功能已经实现了，但是为了减少冗余代码我们将继续进行一些优化-->
+<!--前往 polls/urls.py  > 4.5-->
