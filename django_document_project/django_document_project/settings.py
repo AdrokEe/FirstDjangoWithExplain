@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,10 +21,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-=g&li8&!0to&*3)tp54*-t&9-ig=u2vketmx4+f6e*mw7#=m&^'
+# 一串用以生成各种于安全验证有关的种子
+# 注意：部署时请务必隐藏此数值于任何可在外部访问到的地方
+SECRET_KEY = os.environ.get('DJANGO_SECRT_KEY', 'django-insecure-=g&li8&!0to&*3)tp54*-t&9-ig=u2vketmx4+f6e*mw7#=m&^')
+# os.environ.get() 将会从系统变量中获取这个键所对应的值，未获取则返回第二个字符串
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# 是否显示报错信息
+# 注意：部署时请务必关闭显示报错信息
+DEBUG = bool(os.environ.get('DJANGO_DEBUG', True))
 
 ALLOWED_HOSTS = []
 
@@ -130,6 +136,7 @@ WSGI_APPLICATION = 'django_document_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+# 默认数据库配置为创建时自动新建的 sqlite
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -142,11 +149,12 @@ DATABASES = {
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'django_document_project',
-#         'USER': 'root',
-#         'PASSWORD': 'root',
-#         'HOST': 'localhost',
-#         'PORT': '3306',
+#         'NAME': os.environ.get('DJANGO_MYSQL_DATABASE', 'django_document_project'),
+#         'USER': os.environ.get('DJANGO_MYSQL_USER', 'root'),
+#         'PASSWORD': os.environ.get('DJANGO_MYSQL_PASSWORD', 'root'),
+#         'HOST': os.environ.get('DJANGO_MYSQL_HOST', 'localhost'),
+#         'PORT': int(os.environ.get('DJANGO_MYSQL_PORT', '3306')),
+#         'OPTIONS': {'charset': 'utf8mb4'},
 #     }
 # }
 
