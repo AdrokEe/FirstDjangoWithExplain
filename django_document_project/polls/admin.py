@@ -46,6 +46,9 @@ class QuestionAdmin(admin.ModelAdmin):
         self.search_fields = ["question_text"]
 
         # 7.8 添加分页器
+        # 设置每页条数
+        # 前往 setting.py 设置工程模板  > 7.9
+        self.list_per_page = 20
 
         # 判断改数组是否已经存在
         if obj:

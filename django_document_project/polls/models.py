@@ -2,8 +2,8 @@ import datetime
 from django.contrib import admin
 from django.db import models
 from django.utils import timezone
-# 注意!
-# 每当对模型类进行任何修改后，都请记得对数据库进行迁移
+# 特别注意!!!
+# 每当对模型类进行任何修改后，都请务必记得对数据库进行迁移
 
 
 # 2.3 建立两个模型 Question 和 Choice

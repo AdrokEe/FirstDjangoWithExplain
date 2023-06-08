@@ -105,3 +105,12 @@ Django 会自动管理分发静态文件，通过 settings.py 可以进行相关
 为了对后台管理页面进行一些个性化操作，需要编辑 admin.py 
 
 > 前往polls/admin.py 查看7.1
+
+<br>
+在刚刚创建的 templates 目录下创建一个 inside 目录，把 Django 源码中的模板目录
+django/contrib/admin/templates/admin/base_site.html 复制进来 <br>
+打印 Django 源码的位置:
+
+```shell
+> python -c "import django; print(django.__path__)"
+```

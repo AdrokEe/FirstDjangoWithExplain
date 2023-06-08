@@ -10,10 +10,14 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+# pathlib 是一个比 os 更高级的系统文件处理库
 from pathlib import Path
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+# Path() 返回这个文件的 PosixPath 类
+# PosixPath.resolve() 将这个文件的路径转化为绝对路径
+# POsixPath.parent 获取这个文件的父目录
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -28,7 +32,8 @@ SECRET_KEY = os.environ.get('DJANGO_SECRT_KEY', 'django-insecure-=g&li8&!0to&*3)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # 是否显示报错信息
-# 注意：部署时请务必关闭显示报错信息
+# 注意！
+# 部署时请务必关闭显示报错信息
 DEBUG = bool(os.environ.get('DJANGO_DEBUG', True))
 
 ALLOWED_HOSTS = []
@@ -114,10 +119,19 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'django_document_project.urls'
 
+# 7.9 设置工程的模板
+# 7.9.1 在项目目录下创建一个 templates 目录
+# 回到 WhatHappen.md
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+
+        # 搜索网页模板时按照列表中的路径排序顺序搜索
+        # 顺序如下: App 内的模板优先搜索 APP_DIRS > 再按列表顺序搜索 DIRS
+        # App 也会寻找其他 APP 的模板，顺序为 INSTALLED_APPS 中的顺序
+        'DIRS': [BASE_DIR / "templates"],
+
+        # 是否启用 app_directories.Loader 加载器，这将会搜索 App 内的 templates 目录
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -200,6 +214,33 @@ USE_TZ = False
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
+""" !!!待完善部分!!! """
+# 这里的配置的改动会影响模板获取静态文件资源
+# 特别注意!!!
+# Django 为了减小资源消耗，会将静态资源先收集到一个指定目录中，模板调用时再加载
+# 所以，静态文件将会存在于两个地方：静态文件存储目录，静态文件收集目录
+# 请务必注意静态文件收集目录的位置，这个目录的改变将会直接影响模板读取静态文件
+
+# 用于将你的静态文件从其永久位置收集到一个目录中，以方便部署
+# 这个配置默认为空，如果进行了变动请重新收集静态文件
+# 使用命令: python manage.py collectstatic
+# 详见: https://docs.djangoproject.com/zh-hans/4.2/ref/contrib/staticfiles/#django-admin-collectstatic
+STATIC_ROOT = None
+
+# 当在模板中导入静态文件时，会使用这个配置中的路径
+"""
+例如在应用 my_app 中:
+
+setting.py: 
+STATIC_URL = 'my_static/'
+
+index.html:
+ {% load static %} 
+ 略... 
+ {% static "app/images/example.jpg" %}
+ 
+在这个示例中，这个路径将会是 my_app/my_static/app/images/example.jpg
+"""
 STATIC_URL = 'static/'
 
 # Default primary key field type
