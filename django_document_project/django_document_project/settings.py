@@ -19,7 +19,8 @@ import os
 # PosixPath.resolve() 将这个文件的路径转化为绝对路径
 # POsixPath.parent 获取这个文件的父目录
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+# 使用 os 库的版本（在旧版本中经常使用）
+# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -130,6 +131,8 @@ TEMPLATES = [
         # 顺序如下: App 内的模板优先搜索 APP_DIRS > 再按列表顺序搜索 DIRS
         # App 也会寻找其他 APP 的模板，顺序为 INSTALLED_APPS 中的顺序
         'DIRS': [BASE_DIR / "templates"],
+        # 使用 os 库的版本
+        # 'DIRS': [os.path.join(BASE_DIR, 'templates')]
 
         # 是否启用 app_directories.Loader 加载器，这将会搜索 App 内的 templates 目录
         'APP_DIRS': True,
